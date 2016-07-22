@@ -82,15 +82,17 @@ module.exports = function gulpGhPages(options) {
             return;
           }
 
+          resolve(repo);
+
           // updating to avoid having local cache not up to date
-          gutil.log(TAG, 'Updating repository');
-          repo._repo.git('pull', function(err) {
-            if (err) {
-              reject(err);
-              return;
-            }
-            resolve(repo);
-          });
+          // gutil.log(TAG, 'Updating repository');
+          // repo._repo.git('pull', function(err) {
+          //   if (err) {
+          //     reject(err);
+          //     return;
+          //   }
+          //   resolve(repo);
+          // });
         });
       })
       .then(function(repo) {
@@ -139,7 +141,7 @@ module.exports = function gulpGhPages(options) {
         repo.commit(message).then(function(newRepo) {
           if (options.push === undefined || options.push) {
             gutil.log(TAG, 'Pushing to remote.');
-            newRepo._repo.git('push', {
+            newRepo._repo.git('push -f', {
               'set-upstream': true
             }, [origin, newRepo._currentBranch], function(err) {
               if (err) {
